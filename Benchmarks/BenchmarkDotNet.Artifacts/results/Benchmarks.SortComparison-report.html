@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Benchmarks.SortComparison-20210820-175052</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19042.1165 (20H2/October2020Update)
+Intel Core i5-10400 CPU 2.90GHz, 1 CPU, 12 logical and 6 physical cores
+.NET SDK=5.0.400
+  [Host]     : .NET 5.0.9 (5.0.921.35908), X64 RyuJIT DEBUG
+  DefaultJob : .NET 5.0.9 (5.0.921.35908), X64 RyuJIT
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th> Method</th><th>ListSize</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Ratio</th><th>RatioSD</th><th>Gen 0</th><th>Gen 1</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>ListSort</td><td>10</td><td>2.083 &mu;s</td><td>0.0153 &mu;s</td><td>0.0143 &mu;s</td><td>1.00</td><td>0.00</td><td>0.2251</td><td>-</td><td>1 KB</td>
+</tr><tr><td>ListQuickSort</td><td>10</td><td>2.663 &mu;s</td><td>0.0327 &mu;s</td><td>0.0306 &mu;s</td><td>1.28</td><td>0.01</td><td>0.4616</td><td>-</td><td>3 KB</td>
+</tr><tr><td>ListMergeSort</td><td>10</td><td>2.497 &mu;s</td><td>0.0216 &mu;s</td><td>0.0180 &mu;s</td><td>1.20</td><td>0.01</td><td>0.4005</td><td>-</td><td>2 KB</td>
+</tr><tr><td>ListSort</td><td>100</td><td>6.799 &mu;s</td><td>0.0664 &mu;s</td><td>0.0621 &mu;s</td><td>1.00</td><td>0.00</td><td>1.6556</td><td>0.0381</td><td>10 KB</td>
+</tr><tr><td>ListQuickSort</td><td>100</td><td>17.317 &mu;s</td><td>0.0824 &mu;s</td><td>0.0730 &mu;s</td><td>2.55</td><td>0.02</td><td>7.1716</td><td>0.1526</td><td>44 KB</td>
+</tr><tr><td>ListMergeSort</td><td>100</td><td>17.493 &mu;s</td><td>0.2624 &mu;s</td><td>0.2454 &mu;s</td><td>2.57</td><td>0.04</td><td>5.9509</td><td>0.1526</td><td>37 KB</td>
+</tr><tr><td>ListSort</td><td>1000</td><td>64.639 &mu;s</td><td>0.6551 &mu;s</td><td>0.5807 &mu;s</td><td>1.00</td><td>0.00</td><td>15.9912</td><td>2.8076</td><td>98 KB</td>
+</tr><tr><td>ListQuickSort</td><td>1000</td><td>232.636 &mu;s</td><td>1.4333 &mu;s</td><td>1.1969 &mu;s</td><td>3.61</td><td>0.03</td><td>105.4688</td><td>19.5313</td><td>647 KB</td>
+</tr><tr><td>ListMergeSort</td><td>1000</td><td>252.239 &mu;s</td><td>1.2615 &mu;s</td><td>1.1183 &mu;s</td><td>3.90</td><td>0.03</td><td>84.4727</td><td>16.6016</td><td>520 KB</td>
+</tr></tbody></table>
+</body>
+</html>
