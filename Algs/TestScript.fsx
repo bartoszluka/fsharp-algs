@@ -19,101 +19,51 @@ let rec quickSort (list: int list) =
         quickSort smaller @ (x :: quickSort bigger)
 
 
+let partition predicate (list: int list) =
+    let rec partHelper pred lst pair =
+        match lst with
+        | [] -> pair
+        | x :: xs ->
+            let (left, right) = pair
+
+            if pred x then
+                partHelper pred xs (x :: left, right)
+            else
+                partHelper pred xs (left, x :: right)
+
+    partHelper predicate list ([], [])
+
+let apply2 f (x, y) = f x y
 
 [ 382
-  -550
-  -798
-  -798
-  -798
   706
+  100
+  101
+  21
+  37
+  1706
+  100
+  101
+  21
+  37
+  1706
+  100
+  101
+  21
+  37
+  1706
+  100
+  101
   21
   37
   1
-  -798
   706
-  21
-  37
-  706
-  21
-  37
-  1
-  1
-  1
-  -798
-  706
-  21
-  37
-  1
-  -798
-  706
-  706
-  21
-  37
-  1
-  -798
-  706
-  21
-  37
-  706
-  21
-  37
-  1
-  -798
-  706
-  21
-  37
-  -798
-  706
-  21
-  37
-  1
-  -798
-  706
-  706
-  21
-  37
-  1
-  -798
-  706
-  21
-  37
-  706
-  21
-  37
-  1
-  -798
-  706
-  21
-  37
-  -798
-  706
-  21
-  37
-  1
-  -798
-  706
-  706
-  21
-  37
-  1
-  -798
-  706
-  21
-  37
-  706
-  21
-  37
-  1
-  -798
-  706
-  21
-  37
-  1
-  -798
-  706
+  100
+  101
   21
   37
   1
   -123 ]
-|> quickSort
+|> List.sortDescending
+// |> quickSort
 |> printfn "%A"

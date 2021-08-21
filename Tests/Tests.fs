@@ -5,10 +5,24 @@ module SortingTests
 open Sorts
 open FsCheck.Xunit
 
+let flip f x y = f y x
+
+let apply2 f (x, y) = f x y
+
+let isSorted sorting list =
+    let actualFunc =
+        sorting
+        >> List.pairwise
+        >> List.map (apply2 (<=))
+        >> (List.reduce (&&))
+
+    match list with
+    | [] -> true
+    | [ _ ] -> true
+    | notEmpty -> actualFunc notEmpty
+
 let areTheSameLength sorting list =
     List.length list = List.length (sorting list)
-
-let flip f x y = f y x
 
 let contentsAreTheSame sorting list =
     match sorting list with
@@ -21,16 +35,15 @@ let contentsAreTheSame sorting list =
 let negateIsReversed sorting list =
     let negate x = -x
 
-    let sortLast = list |> List.map negate |> sorting
+    let sortLast = List.map negate >> sorting
 
-    let sortFirst =
-        list |> sorting |> List.map negate |> List.rev
+    let sortFirst = sorting >> List.map negate >> List.rev
 
-    sortLast = sortFirst
+    sortLast list = sortFirst list
 
+// merge sort tests
 [<Property>]
 let ``merge sort contents are the same`` () = contentsAreTheSame mergeSort
-
 
 [<Property>]
 let ``merge sort lengths are the same`` () = areTheSameLength mergeSort
@@ -39,6 +52,11 @@ let ``merge sort lengths are the same`` () = areTheSameLength mergeSort
 let ``merge sort negate is the same`` () = negateIsReversed mergeSort
 
 [<Property>]
+let ``merge sort is sorted`` () = isSorted mergeSort
+
+
+// quick sort tests
+[<Property>]
 let ``quick sort contents are the same`` () = contentsAreTheSame quickSort
 
 [<Property>]
@@ -46,3 +64,6 @@ let ``quick sort lengths are the same`` () = areTheSameLength quickSort
 
 [<Property>]
 let ``quick sort negate is the same`` () = negateIsReversed quickSort
+
+[<Property>]
+let ``quick sort is sorted`` () = isSorted quickSort
