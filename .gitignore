@@ -3,6 +3,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=fsharp
 # Benchmark logs
 Benchmarks*.log
+Benchmarks*.csv
+Benchmarks*.html
 
 #Paket dependency manager
 .paket/
@@ -25,3 +27,5 @@ bin
 
 
 .fake
+build.fsx
+build.fsx.lock
