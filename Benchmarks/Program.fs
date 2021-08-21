@@ -39,6 +39,9 @@ type SortComparison() =
     [<Benchmark>]
     member self.ListInsertionSort() = insertionSort self.MainList
 
+    [<Benchmark>]
+    member self.ListSelectionSort() = selectionSort self.MainList
+
 
 type SortComparisonRandom() =
     inherit SortComparison()
