@@ -43,6 +43,39 @@ let rec quickSort (list: int list) =
 
         quickSort smaller @ (x :: quickSort bigger)
 
+let mapPair f (x, y) = (f x, f y)
+
+let splitWhen predicate (list: int list) =
+    let rec splitHelper pred flag lst (left, right) =
+        match lst with
+        | [] -> (left, right)
+        | x :: xs ->
+            // match flag, pred x with
+            // | true, _ -> splitHelper pred true xs (left, x :: right)
+            // | false, true -> splitHelper pred true xs (left, x :: right)
+            // | false, false -> splitHelper pred (pred x) xs (x :: left, right)
+            if flag || pred x then
+                splitHelper pred true xs (left, x :: right)
+            else
+                splitHelper pred (pred x) xs (x :: left, right)
+
+    splitHelper predicate false list ([], [])
+    |> mapPair List.rev
+
+//possibly do binary insert
+let insertIntoSorted item (list: int list) =
+    // let (smaller, bigger) = splitWhen ((<) item) list
+    let (smaller, bigger) = splitWhen (fun x -> x >= item) list
+    smaller @ (item :: bigger)
+
+let insertionSort (list: int list) =
+    let rec sortHelper (listIn, listOut) =
+        match listIn with
+        | [] -> ([], listOut)
+        | x :: xs -> (xs, insertIntoSorted x listOut)
+
+
+    sortHelper (list, []) |> snd
 
 // let bubbleSortMutable (l: Foo list) =
 //     let mutable l' = l |> Array.ofList
