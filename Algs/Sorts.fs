@@ -62,20 +62,44 @@ let splitWhen predicate (list: int list) =
     splitHelper predicate false list ([], [])
     |> mapPair List.rev
 
+
 //possibly do binary insert
 let insertIntoSorted item (list: int list) =
     // let (smaller, bigger) = splitWhen ((<) item) list
     let (smaller, bigger) = splitWhen (fun x -> x >= item) list
     smaller @ (item :: bigger)
 
-let insertionSort (list: int list) =
+let splitWhenPairwise (f: 'a -> 'a -> bool) (list: list<'a>) =
+    if (List.isEmpty list) then
+        ([], [])
+
+    else
+        let helper (a, b) = f a b
+
+        let firstIndex =
+            list |> List.pairwise |> List.tryFindIndex helper
+
+        match (firstIndex) with
+        | None -> (list, [])
+        | Some n -> List.splitAt n list
+
+let swap (x, y) = (y, x)
+
+let insertionSort =
     let rec sortHelper (listIn, listOut) =
         match listIn with
         | [] -> ([], listOut)
-        | x :: xs -> (xs, insertIntoSorted x listOut)
+        | x :: xs -> sortHelper (xs, insertIntoSorted x listOut)
 
+    splitWhenPairwise (>=)
+    >> swap
+    >> sortHelper
+    >> snd
 
-    sortHelper (list, []) |> snd
+// list
+// |> splitWhenPairwise (>=)
+// |> sortHelper
+// |> snd
 
 // let bubbleSortMutable (l: Foo list) =
 //     let mutable l' = l |> Array.ofList

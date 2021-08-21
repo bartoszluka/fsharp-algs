@@ -36,6 +36,8 @@ type SortComparison() =
     [<Benchmark>]
     member self.ListMergeSort() = mergeSort self.MainList
 
+    [<Benchmark>]
+    member self.ListInsertionSort() = insertionSort self.MainList
 
 
 type SortComparisonRandom() =

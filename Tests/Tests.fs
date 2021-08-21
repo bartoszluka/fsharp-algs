@@ -67,3 +67,16 @@ let ``quick sort negate is the same`` () = negateIsReversed quickSort
 
 [<Property>]
 let ``quick sort is sorted`` () = isSorted quickSort
+
+// insertion sort tests
+[<Property>]
+let ``insertion sort contents are the same`` () = contentsAreTheSame insertionSort
+
+[<Property>]
+let ``insertion sort lengths are the same`` () = areTheSameLength insertionSort
+
+[<Property>]
+let ``insertion sort negate is the same`` () = negateIsReversed insertionSort
+
+[<Property>]
+let ``insertion sort is sorted`` () = isSorted insertionSort

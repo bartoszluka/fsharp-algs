@@ -66,14 +66,28 @@ let insertionSort (list: int list) =
     let rec sortHelper (listIn, listOut) =
         match listIn with
         | [] -> ([], listOut)
-        | x :: xs -> (xs, insertIntoSorted x listOut)
+        | x :: xs -> sortHelper (xs, insertIntoSorted x listOut)
 
 
     sortHelper (list, []) |> snd
 
-[ 382; 100; 101; 21; 37; 1; -123 ]
-// [ 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11 ]
-// |> insertionSort
-|> insertIntoSorted -1
-// |> splitWhen (fun x -> x >= 0)
-|> printfn "%A"
+let splitWhenPairwise (f: 'a -> 'a -> bool) (list: list<'a>) =
+    if (List.isEmpty list) then
+        ([], [])
+
+    else
+        let helper (a, b) = f a b
+
+        let firstIndex =
+            list |> List.pairwise |> List.tryFindIndex helper
+
+        match (firstIndex) with
+        | None -> (list, [])
+        | Some n -> List.splitAt n list
+
+// [ 382; 100; 101; 21; 37; 1; -123 ]
+[ 1; 2; 3; 4; 5; 9; 7; 8; 9; 10; 11 ]
+|> splitWhenPairwise (>=)
+// |> insertIntoSorted -1
+// // |> splitWhen (fun x -> x >= 0)
+|> mapPair (printfn "%A")
