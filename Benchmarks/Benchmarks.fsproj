@@ -9,7 +9,7 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SortingAlgs\SortingAlgs.fsproj" />
+    <ProjectReference Include="..\Algs\Algs.fsproj" />
   </ItemGroup>
   <Import Project=".paket\Paket.Restore.targets" />
 </Project>
