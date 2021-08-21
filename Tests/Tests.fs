@@ -80,3 +80,16 @@ let ``insertion sort negate is the same`` () = negateIsReversed insertionSort
 
 [<Property>]
 let ``insertion sort is sorted`` () = isSorted insertionSort
+
+// selection sort tests
+[<Property>]
+let ``selection sort contents are the same`` () = contentsAreTheSame selectionSort
+
+[<Property>]
+let ``selection sort lengths are the same`` () = areTheSameLength selectionSort
+
+[<Property>]
+let ``selection sort negate is the same`` () = negateIsReversed selectionSort
+
+[<Property>]
+let ``selection sort is sorted`` () = isSorted selectionSort

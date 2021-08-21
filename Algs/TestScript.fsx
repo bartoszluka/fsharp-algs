@@ -85,9 +85,38 @@ let splitWhenPairwise (f: 'a -> 'a -> bool) (list: list<'a>) =
         | None -> (list, [])
         | Some n -> List.splitAt n list
 
-// [ 382; 100; 101; 21; 37; 1; -123 ]
-[ 1; 2; 3; 4; 5; 9; 7; 8; 9; 10; 11 ]
-|> splitWhenPairwise (>=)
+
+let removeMin list =
+    match list with
+    | [] -> None
+    | notEmpty ->
+        let indexedList = List.indexed notEmpty
+
+        let min =
+            indexedList
+            |> List.reduce (fun (xi, x) (yi, y) -> if x < y then (xi, x) else (yi, y))
+
+        List.filter (fun x -> min <> x) indexedList
+        |> List.map snd
+        |> (fun l -> ((snd min), l))
+        |> Some
+
+
+let selectionSort list =
+    let rec sortHelper (listIn, listOut) =
+        match removeMin listIn with
+        | None -> ([], listOut)
+        | Some (min, rest) -> sortHelper (rest, min :: listOut)
+
+    sortHelper (list, []) |> snd |> List.rev
+
+[ 382; 100; 101; 1; 21; 37; 1; -123 ]
+// [ 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11 ]
+// |> splitWhenPairwise (>=)
 // |> insertIntoSorted -1
 // // |> splitWhen (fun x -> x >= 0)
-|> mapPair (printfn "%A")
+// |> mapPair (printfn "%A")
+// |> removeMin
+|> selectionSort
+|> printfn "%A"
+// |> mapPair (printfn "%d")

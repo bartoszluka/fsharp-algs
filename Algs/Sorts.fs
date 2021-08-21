@@ -96,6 +96,33 @@ let insertionSort =
     >> sortHelper
     >> snd
 
+let findMin comparison list = List.reduce comparison
+
+let flip f x y = f y x
+
+let removeMin list =
+    match list with
+    | [] -> None
+    | notEmpty ->
+        let indexedList = List.indexed notEmpty
+
+        let min =
+            indexedList
+            |> List.reduce (fun (xi, x) (yi, y) -> if x < y then (xi, x) else (yi, y))
+
+        List.filter (fun x -> min <> x) indexedList
+        |> List.map snd
+        |> (fun l -> ((snd min), l))
+        |> Some
+
+
+let selectionSort (list: int list) =
+    let rec sortHelper (listIn, listOut) =
+        match removeMin listIn with
+        | None -> ([], listOut)
+        | Some (min, rest) -> sortHelper (rest, min :: listOut)
+
+    sortHelper (list, []) |> snd |> List.rev
 // list
 // |> splitWhenPairwise (>=)
 // |> sortHelper
