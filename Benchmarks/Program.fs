@@ -16,8 +16,7 @@ let initSortedList n = initRandomList n |> List.sort
 let initReversedList n = initRandomList n |> List.sortDescending
 
 
-[<AbstractClass>]
-[<MemoryDiagnoser>]
+[<AbstractClass; MemoryDiagnoser; MarkdownExporter>]
 type SortComparison() =
 
     [<Params(20, 100, 1000)>]
