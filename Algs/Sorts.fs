@@ -122,11 +122,6 @@ let insertionSortInt (list: int list) = insertionSort list
 
 let insertionSortDescendigInt (list: int list) = insertionSortDescendig list
 
-let fork unary1 unary2 binary =
-    let apply x = binary (unary1 x) (unary2 x)
-
-    List.map apply
-
 let removeMin comparison =
     function
     | [] -> None
