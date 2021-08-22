@@ -9,6 +9,10 @@ let flip f x y = f y x
 
 let apply2 f (x, y) = f x y
 
+// generic properties
+let sortThenReverse sorting reverseSorting list =
+    reverseSorting list = (sorting >> List.rev) list
+
 let isSorted sorting list =
     let actualFunc =
         sorting
@@ -54,6 +58,10 @@ let ``merge sort negate is the same`` () = negateIsReversed mergeSort
 [<Property>]
 let ``merge sort is sorted`` () = isSorted mergeSort
 
+[<Property>]
+let ``merge sort sort then reverse is reverse sort`` () =
+    sortThenReverse mergeSort mergeSortDescendig
+
 
 // quick sort tests
 [<Property>]
@@ -68,6 +76,11 @@ let ``quick sort negate is the same`` () = negateIsReversed quickSort
 [<Property>]
 let ``quick sort is sorted`` () = isSorted quickSort
 
+[<Property>]
+let ``quick sort sort then reverse is reverse sort`` () =
+    sortThenReverse quickSort quickSortDescendig
+
+
 // insertion sort tests
 [<Property>]
 let ``insertion sort contents are the same`` () = contentsAreTheSame insertionSort
@@ -81,6 +94,11 @@ let ``insertion sort negate is the same`` () = negateIsReversed insertionSort
 [<Property>]
 let ``insertion sort is sorted`` () = isSorted insertionSort
 
+[<Property>]
+let ``insertion sort sort then reverse is reverse sort`` () =
+    sortThenReverse insertionSort insertionSortDescendig
+
+
 // selection sort tests
 [<Property>]
 let ``selection sort contents are the same`` () = contentsAreTheSame selectionSort
@@ -93,3 +111,7 @@ let ``selection sort negate is the same`` () = negateIsReversed selectionSort
 
 [<Property>]
 let ``selection sort is sorted`` () = isSorted selectionSort
+
+[<Property>]
+let ``selection sort sort then reverse is reverse sort`` () =
+    sortThenReverse selectionSort selectionSortDescendig
