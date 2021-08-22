@@ -20,7 +20,7 @@ let initReversedList n = initRandomList n |> List.sortDescending
 [<MemoryDiagnoser>]
 type SortComparison() =
 
-    [<Params(10, 100, 10000)>]
+    [<Params(20, 100, 1000)>]
     member val ListSize: int = 0 with get, set
 
     abstract member Initializer : (int -> int list)
