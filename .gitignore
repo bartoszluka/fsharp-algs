@@ -1,6 +1,10 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/fsharp
 # Edit at https://www.toptal.com/developers/gitignore?templates=fsharp
+
+# fake cache
+.fake
+
 # Benchmark logs
 Benchmarks*.log
 Benchmarks*.csv
@@ -24,8 +28,3 @@ bin
 .ionide/
 
 # End of https://www.toptal.com/developers/gitignore/api/fsharp
-
-
-.fake
-build.fsx
-build.fsx.lock
