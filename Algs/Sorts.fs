@@ -67,10 +67,6 @@ let splitWhen predicate list =
         match lst with
         | [] -> (left, right)
         | x :: xs ->
-            // match flag, pred x with
-            // | true, _ -> splitHelper pred true xs (left, x :: right)
-            // | false, true -> splitHelper pred true xs (left, x :: right)
-            // | false, false -> splitHelper pred (pred x) xs (x :: left, right)
             if flag || pred x then
                 splitHelper pred true xs (left, x :: right)
             else
@@ -82,9 +78,8 @@ let splitWhen predicate list =
 let flip f x y = f y x
 
 let insertIntoSorted comparison item list =
-    // let (smaller, bigger) = splitWhen ((<) item) list
     let (smaller, bigger) = splitWhen (comparison item) list
-    //this is faster than this smaller @ [ item ] @ bigger
+    //this is slightly faster than this smaller @ [ item ] @ bigger
     smaller @ (item :: bigger)
 
 let splitWhenPairwise compare list =
