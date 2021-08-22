@@ -4,9 +4,7 @@
   "tools": {
     "fake-cli": {
       "version": "5.20.4",
-      "commands": [
-        "fake"
-      ]
+      "commands": ["fake"]
     }
   }
 }
