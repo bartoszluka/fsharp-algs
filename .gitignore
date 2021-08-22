@@ -10,8 +10,7 @@ Benchmarks*.log
 Benchmarks*.csv
 Benchmarks*.html
 
-#Paket dependency manager
-.paket/
+# Paket dependency manager
 paket-files/
 
 ### fsharp ###
