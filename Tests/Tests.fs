@@ -3,115 +3,76 @@
 module SortingTests
 
 open Sorts
+open Xunit
 open FsCheck.Xunit
 
 let flip f x y = f y x
 
 let apply2 f (x, y) = f x y
 
-// generic properties
-let sortThenReverse sorting reverseSorting list =
-    reverseSorting list = (sorting >> List.rev) list
+[<AbstractClass>]
+type SortTests(sorting, sortingReverse) =
 
-let isSorted sorting list =
-    let actualFunc =
-        sorting
-        >> List.pairwise
-        >> List.map (apply2 (<=))
-        >> (List.reduce (&&))
+    [<Property>]
+    member _.``contents are the same`` list =
+        match sorting list with
+        | [] -> true
+        | notEmpty ->
+            notEmpty
+            |> List.map (flip List.contains list)
+            |> List.reduce (&&)
 
-    match list with
-    | [] -> true
-    | [ _ ] -> true
-    | notEmpty -> actualFunc notEmpty
+    [<Property>]
+    member _.``lengths are the same`` list =
+        List.length list = List.length (sorting list)
 
-let areTheSameLength sorting list =
-    List.length list = List.length (sorting list)
+    [<Property>]
+    member _.``sorting negated numbers is reversed normal sorting`` list =
+        let negate x = -x
 
-let contentsAreTheSame sorting list =
-    match sorting list with
-    | [] -> true
-    | notEmpty ->
-        notEmpty
-        |> List.map (flip List.contains list)
-        |> List.reduce (&&)
+        let sortLast = List.map negate >> sorting
 
-let negateIsReversed sorting list =
-    let negate x = -x
+        let sortFirst = sorting >> List.map negate >> List.rev
 
-    let sortLast = List.map negate >> sorting
+        sortLast list = sortFirst list
 
-    let sortFirst = sorting >> List.map negate >> List.rev
+    [<Property>]
+    member _.``every element is greater or equal to the previous`` list =
+        let isSorted =
+            sorting
+            >> List.pairwise
+            >> List.map (apply2 (<=))
+            >> (List.reduce (&&))
 
-    sortLast list = sortFirst list
-
-// merge sort tests
-[<Property>]
-let ``merge sort contents are the same`` () = contentsAreTheSame mergeSort
-
-[<Property>]
-let ``merge sort lengths are the same`` () = areTheSameLength mergeSort
-
-[<Property>]
-let ``merge sort negate is the same`` () = negateIsReversed mergeSort
-
-[<Property>]
-let ``merge sort is sorted`` () = isSorted mergeSort
-
-[<Property>]
-let ``merge sort sort then reverse is reverse sort`` () =
-    sortThenReverse mergeSort mergeSortDescendig
+        match list with
+        | [] -> true
+        | [ _ ] -> true
+        | notEmpty -> isSorted notEmpty
 
 
-// quick sort tests
-[<Property>]
-let ``quick sort contents are the same`` () = contentsAreTheSame quickSort
+    [<Property>]
+    member _.``sort then reversing is the same as sorting in the other direction`` list =
+        sortingReverse list = (sorting >> List.rev) list
 
-[<Property>]
-let ``quick sort lengths are the same`` () = areTheSameLength quickSort
+    [<Fact>]
+    member _.``empty list sorted is still an empty list``() = [] = sorting [] |> Assert.True
 
-[<Property>]
-let ``quick sort negate is the same`` () = negateIsReversed quickSort
-
-[<Property>]
-let ``quick sort is sorted`` () = isSorted quickSort
-
-[<Property>]
-let ``quick sort sort then reverse is reverse sort`` () =
-    sortThenReverse quickSort quickSortDescendig
+    [<Fact>]
+    member _.``one element list sorted is still one element list``() = [ 1 ] = sorting [ 1 ] |> Assert.True
 
 
-// insertion sort tests
-[<Property>]
-let ``insertion sort contents are the same`` () = contentsAreTheSame insertionSort
+    [<Fact>]
+    member _.``sorting three element list``() =
+        [ 1; 2; 3 ] = sorting [ 1; 3; 2 ] |> Assert.True
 
-[<Property>]
-let ``insertion sort lengths are the same`` () = areTheSameLength insertionSort
+type MergeSortTests() =
+    inherit SortTests(mergeSort, mergeSortDescendig)
 
-[<Property>]
-let ``insertion sort negate is the same`` () = negateIsReversed insertionSort
+type QuickSortTests() =
+    inherit SortTests(quickSort, quickSortDescendig)
 
-[<Property>]
-let ``insertion sort is sorted`` () = isSorted insertionSort
+type InsertionSortTests() =
+    inherit SortTests(insertionSort, insertionSortDescendig)
 
-[<Property>]
-let ``insertion sort sort then reverse is reverse sort`` () =
-    sortThenReverse insertionSort insertionSortDescendig
-
-
-// selection sort tests
-[<Property>]
-let ``selection sort contents are the same`` () = contentsAreTheSame selectionSort
-
-[<Property>]
-let ``selection sort lengths are the same`` () = areTheSameLength selectionSort
-
-[<Property>]
-let ``selection sort negate is the same`` () = negateIsReversed selectionSort
-
-[<Property>]
-let ``selection sort is sorted`` () = isSorted selectionSort
-
-[<Property>]
-let ``selection sort sort then reverse is reverse sort`` () =
-    sortThenReverse selectionSort selectionSortDescendig
+type SelectionSortTests() =
+    inherit SortTests(selectionSort, selectionSortDescendig)
