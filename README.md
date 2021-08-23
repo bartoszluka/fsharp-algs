@@ -1,5 +1,7 @@
 # F# algorithms
 
+![build badge](https://github.com/bartoszluka/fsharp-algs/actions/workflows/build.yml/badge.svg)
+
 ## Introduction
 
 This project is an implementation of some sorting algorithms in F#.
