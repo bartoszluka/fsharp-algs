@@ -17,14 +17,12 @@ let initReversedList n = initRandomList n |> List.sortDescending
 
 
 [<AbstractClass; MemoryDiagnoser; MarkdownExporter>]
-type SortComparison() =
+type SortComparison(initializer) =
 
     [<Params(20, 100, 1000)>]
     member val ListSize: int = 0 with get, set
 
-    abstract member Initializer : (int -> int list)
-
-    member self.MainList = self.Initializer self.ListSize
+    member self.MainList = initializer self.ListSize
 
     [<Benchmark(Baseline = true)>]
     member self.ListSort() = List.sort self.MainList
@@ -41,22 +39,18 @@ type SortComparison() =
     [<Benchmark>]
     member self.ListSelectionSort() = selectionSort self.MainList
 
+    [<Benchmark>]
+    member self.ListShakerSort() = ListZipper.shakerSort self.MainList
+
 
 type SortComparisonRandom() =
-    inherit SortComparison()
-
-    override _.Initializer = initRandomList
-
+    inherit SortComparison(initRandomList)
 
 type SortComparisonReversed() =
-    inherit SortComparison()
-
-    override _.Initializer = initReversedList
+    inherit SortComparison(initReversedList)
 
 type SortComparisonSorted() =
-    inherit SortComparison()
-
-    override _.Initializer = initSortedList
+    inherit SortComparison(initSortedList)
 
 
 [<EntryPoint>]

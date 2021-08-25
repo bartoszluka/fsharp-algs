@@ -56,39 +56,49 @@ let swapWithLeft (ListZipper (left, current, right)) =
     | [] -> None
     | x :: xs -> ListZipper(current :: xs, x, right) |> Some
 
-let costam = [ 2; 1; 3; 7 ]
-
-let zipper = fromList costam
-
-
 let inline (>>=) fun1 fun2 = fun1 >> Option.bind fun2
 
-
-let rec moveMaxToEnd =
-    function
+let rec moveMaxToEnd comparison (didChange, zipper) =
+    match zipper with
     | ListZipper (left, current, x :: xs) ->
-        if current > x then
-            ListZipper(x :: left, current, xs) |> moveMaxToEnd
+        if comparison x current then
+            moveMaxToEnd comparison (true, ListZipper(x :: left, current, xs))
         else
-            ListZipper(current :: left, x, xs) |> moveMaxToEnd
-    | zipper -> zipper
+            moveMaxToEnd comparison (didChange, ListZipper(current :: left, x, xs))
+    | zipper -> (didChange, zipper)
 
-let rec moveMinToStart =
-    function
+let rec moveMinToStart comparison (didChange, zipper) =
+    match zipper with
     | ListZipper (x :: xs, current, right) ->
-        if current < x then
-            ListZipper(xs, current, x :: right)
-            |> moveMinToStart
+        if comparison current x then
+            moveMinToStart comparison (true, ListZipper(xs, current, x :: right))
         else
-            ListZipper(xs, x, current :: right)
-            |> moveMinToStart
-    | zipper -> zipper
+            moveMinToStart comparison (didChange, ListZipper(xs, x, current :: right))
+    | zipper -> (didChange, zipper)
 
+let shakerSortWith comparison =
+    let rec sortHelper (didChange, zipper) =
+        if didChange then
+            match moveMinToStart comparison (false, zipper) with
+            | true, notSorted ->
+                (false, notSorted)
+                |> moveMaxToEnd comparison
+                |> sortHelper
+            | false, sorted -> toList sorted
+        else
+            toList zipper
 
-let sort zipper =
-    let current = focus zipper
+    function
+    | [] -> []
+    | x :: xs ->
+        let zipper = ListZipper([], x, xs)
 
-    if isRight (fun right -> current <= right) zipper then
-        swapWithRight zipper
-    else
-        Some zipper
+        (false, zipper)
+        |> moveMaxToEnd comparison
+        |> sortHelper
+
+let shakerSort list = shakerSortWith (<) list
+let shakerSortDescending list = shakerSortWith (>) list
+
+let shakerSortInt (list: int list) = shakerSortWith (<) list
+let shakerSortDescendingInt (list: int list) = shakerSortWith (>) list

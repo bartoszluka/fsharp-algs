@@ -76,3 +76,6 @@ type InsertionSortTests() =
 
 type SelectionSortTests() =
     inherit SortTests(selectionSort, selectionSortDescendig)
+
+type ShakerSortTests() =
+    inherit SortTests(ListZipper.shakerSort, ListZipper.shakerSortDescending)

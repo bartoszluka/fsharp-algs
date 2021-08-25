@@ -1,13 +1,8 @@
-```ini
-
 BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19042.1165 (20H2/October2020Update)
 Intel Core i5-10400 CPU 2.90GHz, 1 CPU, 12 logical and 6 physical cores
 .NET SDK=5.0.400
-  [Host]     : .NET 5.0.9 (5.0.921.35908), X64 RyuJIT DEBUG
-  DefaultJob : .NET 5.0.9 (5.0.921.35908), X64 RyuJIT
-
-
-```
+[Host] : .NET 5.0.9 (5.0.921.35908), X64 RyuJIT DEBUG
+DefaultJob : .NET 5.0.9 (5.0.921.35908), X64 RyuJIT
 
 | Method            | ListSize |          Mean |         Error |        StdDev |    Ratio |  RatioSD |       Gen 0 |      Gen 1 |  Allocated |
 | ----------------- | -------- | ------------: | ------------: | ------------: | -------: | -------: | ----------: | ---------: | ---------: |

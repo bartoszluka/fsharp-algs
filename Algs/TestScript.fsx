@@ -51,31 +51,18 @@ let test =
     [ 382
       100
       101
-      1
       21
       37
-      1
-      -123
-      2
-      8
-      21
-      345
       123
-      43
-      978
+      530
+      92
+      -12
       12
       234 ]
 // let test = [ 4; 1; 2; 1 ]
-[ 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11 ]
+// let test = [ 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11 ]
 
 #load "./ListZipper.fs"
 open ListZipper
 
-let len = List.length test
-
-let mutable zipper = ListZipper([], 100, test)
-
-for _ in [ 1 .. len / 2 ] do
-    zipper <- zipper |> moveMaxToEnd |> moveMinToStart
-
-zipper |> toList |> printfn "%A"
+test |> shakerSortWith (<) |> printfn "%A"
