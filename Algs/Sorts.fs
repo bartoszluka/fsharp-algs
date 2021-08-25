@@ -140,7 +140,8 @@ let removeMin comparison =
                     else
                         (yInd, yVal))
 
-        List.filter (fun x -> min <> x) indexedList
+        indexedList
+        |> List.filter (fun x -> min <> x)
         |> List.map snd
         |> (fun lst -> ((snd min), lst))
         |> Some
