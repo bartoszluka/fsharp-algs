@@ -49,8 +49,9 @@ let rec quickSortWith comparison =
     | x :: xs ->
         let (bigger, smaller) = partition (comparison x) xs
 
-        quickSortWith comparison smaller
-        @ (x :: quickSortWith comparison bigger)
+        List.concat [ quickSortWith comparison smaller
+                      [ x ]
+                      quickSortWith comparison bigger ]
 
 
 let quickSort = quickSortWith (<=)
@@ -63,39 +64,45 @@ let quickSortDescendigInt (list: int list) = quickSortDescendig list
 
 let mapPair f (x, y) = (f x, f y)
 
-let splitWhen predicate list =
-    let rec splitHelper pred flag lst (left, right) =
-        match lst with
+let unPair f (x, y) = f x y
+
+let splitWhen predicate =
+    let rec splitHelper pred flag (left, right) =
+        function
         | [] -> (left, right)
         | x :: xs ->
             if flag || pred x then
-                splitHelper pred true xs (left, x :: right)
+                splitHelper pred true (left, x :: right) xs
             else
-                splitHelper pred (pred x) xs (x :: left, right)
+                splitHelper pred (pred x) (x :: left, right) xs
 
-    splitHelper predicate false list ([], [])
-    |> mapPair List.rev
+    splitHelper predicate false ([], [])
+    >> mapPair List.rev
 
 let flip f x y = f y x
 
 let insertIntoSorted comparison item list =
     let (smaller, bigger) = splitWhen (comparison item) list
-    //this is slightly faster than this smaller @ [ item ] @ bigger
-    smaller @ (item :: bigger)
+
+    List.concat [ smaller
+                  [ item ]
+                  bigger ]
+
+let safePairwise =
+    function
+    | [] -> []
+    | [ _ ] -> []
+    | list -> List.pairwise list
 
 let splitWhenPairwise compare list =
-    if (List.isEmpty list) then
-        ([], [])
+    let firstIndex =
+        list
+        |> safePairwise
+        |> List.tryFindIndex (unPair compare)
 
-    else
-        let helper (a, b) = compare a b
-
-        let firstIndex =
-            list |> List.pairwise |> List.tryFindIndex helper
-
-        match (firstIndex) with
-        | None -> (list, [])
-        | Some n -> List.splitAt n list
+    match firstIndex with
+    | None -> (list, [])
+    | Some n -> List.splitAt n list
 
 let swap (x, y) = (y, x)
 
