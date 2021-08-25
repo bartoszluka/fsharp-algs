@@ -28,19 +28,20 @@ let mergeSortInt (list: int list) = mergeSort list
 
 let mergeSortDescendigInt (list: int list) = mergeSortDescendig list
 
-let partition predicate list =
-    let rec partHelper pred lst pair =
-        match lst with
-        | [] -> pair
+let partition predicate =
+    let rec partHelper pred (left, right) =
+        function
+        | [] -> (left, right)
         | x :: xs ->
-            let (left, right) = pair
+            let concat =
+                if pred x then
+                    (x :: left, right)
+                else
+                    (left, x :: right)
 
-            if pred x then
-                partHelper pred xs (x :: left, right)
-            else
-                partHelper pred xs (left, x :: right)
+            partHelper pred concat xs
 
-    partHelper predicate list ([], [])
+    partHelper predicate ([], [])
 
 let rec quickSortWith comparison =
     function
