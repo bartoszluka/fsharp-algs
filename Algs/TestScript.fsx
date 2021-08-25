@@ -47,18 +47,35 @@ let insertionSortWith comparison =
     >> sortHelper
     >> snd
 
-let insertionSort = insertionSortWith (<=)
-
-// [ 382; 100; 101; 1; 21; 37; 1; -123 ]
+let test =
+    [ 382
+      100
+      101
+      1
+      21
+      37
+      1
+      -123
+      2
+      8
+      21
+      345
+      123
+      43
+      978
+      12
+      234 ]
+// let test = [ 4; 1; 2; 1 ]
 [ 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11 ]
 
-// |> splitWhenPairwise (>=)
-// |> insertIntoSorted -1
-// // |> splitWhen (fun x -> x >= 0)
-// |> mapPair (printfn "%A")
-// |> removeMin
-|> insertionSort
-// |> printfn "%A"
-// |> mapPair (printfn "%d")
-// fork ((+) 2) (fun x -> x - 2) (+) [ 1; 2; 3 ]
-|> printfn "%A"
+#load "./ListZipper.fs"
+open ListZipper
+
+let len = List.length test
+
+let mutable zipper = ListZipper([], 100, test)
+
+for _ in [ 1 .. len / 2 ] do
+    zipper <- zipper |> moveMaxToEnd |> moveMinToStart
+
+zipper |> toList |> printfn "%A"
