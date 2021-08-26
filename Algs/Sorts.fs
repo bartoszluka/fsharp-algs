@@ -1,10 +1,10 @@
 module Sorts
 
 let rec mergeWith compare listA listB : 'a list =
-    match (listA, listB) with
-    | ([], _) -> listB
-    | (_, []) -> listA
-    | (x :: xs, y :: ys) ->
+    match listA, listB with
+    | [], _ -> listB
+    | _, [] -> listA
+    | x :: xs, y :: ys ->
         if compare x y then
             x :: (mergeWith compare xs listB)
         else
@@ -107,15 +107,13 @@ let splitWhenPairwise compare list =
 let swap (x, y) = (y, x)
 
 let insertionSortWith comparison =
-    let rec sortHelper (listIn, listOut) =
+    let rec sortHelper listOut listIn =
         match listIn with
-        | [] -> ([], listOut)
-        | x :: xs -> sortHelper (xs, insertIntoSorted comparison x listOut)
+        | [] -> listOut
+        | x :: xs -> sortHelper (insertIntoSorted comparison x listOut) xs
 
     splitWhenPairwise (flip comparison)
-    >> swap
-    >> sortHelper
-    >> snd
+    >> unPair sortHelper
 
 let insertionSort = insertionSortWith (<=)
 
@@ -147,13 +145,12 @@ let removeMin comparison =
         |> Some
 
 let selectionSortWith comparison =
-    let rec sortHelper (listIn, listOut) =
+    let rec sortHelper listOut listIn =
         match removeMin comparison listIn with
-        | None -> ([], listOut)
-        | Some (min, rest) -> sortHelper (rest, min :: listOut)
+        | None -> listOut
+        | Some (min, rest) -> sortHelper (min :: listOut) rest
 
-    let pairUp list = (list, [])
-    pairUp >> sortHelper >> snd >> List.rev
+    sortHelper [] >> List.rev
 
 let selectionSort = selectionSortWith (<=)
 
